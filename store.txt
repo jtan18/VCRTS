@@ -1,0 +1,10 @@
+
+[Tue, Oct 13 2020 22:11:05]
+Client ID: 123
+Approximate Duration: 5.0 minutes
+Deadline Date: 123
+
+[Tue, Oct 13 2020 22:11:23]
+Owner ID: 123
+Vehicle Description: 123
+Available for 123 hours
