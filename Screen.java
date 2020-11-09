@@ -20,7 +20,6 @@ public class Screen extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 clientsubmit.setVisible(true);
-
             }
         });
         buttonOwner.addActionListener(new ActionListener() {
@@ -31,9 +30,4 @@ public class Screen extends JFrame{
         });
     }
 
-    public static void main(String[] args) throws IOException {
-        Screen screen=new Screen();
-        screen.setVisible(true);
-
-    }
 }

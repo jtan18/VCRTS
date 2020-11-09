@@ -14,11 +14,14 @@ public class ClientSubmit extends JFrame {
     private JTextField textField2;
     private JTextField textField3;
     private JButton sumitButton;
-    public void writeToText(int id, double duration, String duedate) {
+    int compTime;
+    CloudController cc = new CloudController();
+
+    public void writeToText(int id, double duration, String duedate, double cTime) {
         try {LocalDateTime timestamp = LocalDateTime.now();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
             String formattedDate = timestamp.format(dateFormatter);
-            FileWriter writer = new FileWriter("src\\store.txt", true);
+            FileWriter writer = new FileWriter("out.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
             bufferedWriter.newLine();
@@ -30,6 +33,8 @@ public class ClientSubmit extends JFrame {
             bufferedWriter.write("Approximate Duration: " + duration + " minutes");
             bufferedWriter.newLine();
             bufferedWriter.write("Deadline Date: " + duedate);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Completion Time of Jobs: " + cTime);
 
             bufferedWriter.newLine();
 
@@ -48,10 +53,16 @@ public class ClientSubmit extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String clientID=textField1.getText();
                 int id=Integer.parseInt(clientID);
+
                 String jobDuration=textField2.getText();
                 double jobD=Double.parseDouble(jobDuration);
+                double totalCompletionTime= cc.calculateCtime(jobD);
+
                 String jobDeadline=textField3.getText();
-                writeToText(id,jobD,jobDeadline);
+                writeToText(id,jobD,jobDeadline,totalCompletionTime);
+                textField1.setText("");
+                textField2.setText("");
+                textField3.setText("");
                 dispose();
             }
         });

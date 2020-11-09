@@ -20,7 +20,7 @@ public class OwnerSubmit extends JFrame{
         try {LocalDateTime timestamp = LocalDateTime.now();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
             String formattedDate = timestamp.format(dateFormatter);
-            FileWriter writer = new FileWriter("src\\store.txt", true);
+            FileWriter writer = new FileWriter("out.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             bufferedWriter.newLine();
             bufferedWriter.write("[" + formattedDate + "]");
@@ -50,6 +50,9 @@ public class OwnerSubmit extends JFrame{
                 String vehicleTime=textField3.getText();
                 int vTime=Integer.parseInt(vehicleTime);
                 writeToText(id,vehicleInfo,vTime);
+                textField1.setText("");
+                textField2.setText("");
+                textField3.setText("");
                 dispose();
             }
         });
