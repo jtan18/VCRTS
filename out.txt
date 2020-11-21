@@ -1,0 +1,25 @@
+
+
+[Mon, Nov 02 2020 19:03:43]
+Client ID: 123
+Approximate Duration: 5.0 minutes
+Deadline Date: 123
+Completion Time of Jobs: 5.0
+
+[Mon, Nov 02 2020 19:03:54]
+Client ID: 123
+Approximate Duration: 5.0 minutes
+Deadline Date: 123
+Completion Time of Jobs: 10.0
+
+[Mon, Nov 02 2020 19:06:12]
+Client ID: 123
+Approximate Duration: 5.0 minutes
+Deadline Date: 123
+Completion Time of Jobs: 5.0
+
+[Mon, Nov 02 2020 19:06:27]
+Client ID: 123
+Approximate Duration: 10.0 minutes
+Deadline Date: 585
+Completion Time of Jobs: 15.0

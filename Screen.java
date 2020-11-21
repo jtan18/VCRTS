@@ -16,6 +16,7 @@ public class Screen extends JFrame{
         this.pack();
         OwnerSubmit ownersubmit=new OwnerSubmit();
         ClientSubmit clientsubmit=new ClientSubmit();
+        CloudController cloudController=new CloudController(clientsubmit);
         buttonClient.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

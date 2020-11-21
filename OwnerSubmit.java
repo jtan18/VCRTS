@@ -14,9 +14,14 @@ public class OwnerSubmit extends JFrame{
     private JTextField textField2;
     private JTextField textField3;
     private JButton submitButton;
-    public int ownerID;
+    private JPanel JPanelConfirm;
+    private JPanel JPanel1;
+    private JButton rejectButton;
 
-    public void writeToText(int id, String vehicleInfo, int vehicleTime) {
+    public int ownerID;
+    public Vehicle queuedVehicle;
+
+    public void writeToText(int id, String vehicleInfo, String vehicleTime) {
         try {LocalDateTime timestamp = LocalDateTime.now();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
             String formattedDate = timestamp.format(dateFormatter);
@@ -41,6 +46,9 @@ public class OwnerSubmit extends JFrame{
         this.setContentPane(this.ownerPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
+        JPanelConfirm.setVisible(false);
+        CloudController cc=new CloudController(this);
+        CloudController cloudController=new CloudController();
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,13 +57,17 @@ public class OwnerSubmit extends JFrame{
                 String vehicleInfo=textField2.getText();
                 String vehicleTime=textField3.getText();
                 int vTime=Integer.parseInt(vehicleTime);
-                writeToText(id,vehicleInfo,vTime);
                 textField1.setText("");
                 textField2.setText("");
                 textField3.setText("");
+                cc.setVisible(true);
+                queuedVehicle = new Vehicle(id, vehicleInfo, vehicleTime);
                 dispose();
             }
         });
+    }
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

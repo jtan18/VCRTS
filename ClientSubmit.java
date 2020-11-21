@@ -15,7 +15,8 @@ public class ClientSubmit extends JFrame {
     private JTextField textField3;
     private JButton sumitButton;
     int compTime;
-    CloudController cc = new CloudController();
+    public Job queuedJob;
+    public Client Sampleclient;
 
     public void writeToText(int id, double duration, String duedate, double cTime) {
         try {LocalDateTime timestamp = LocalDateTime.now();
@@ -48,21 +49,28 @@ public class ClientSubmit extends JFrame {
         this.setContentPane(this.clientPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
+        CloudController cloudController=new CloudController();
+        CloudController cc=new CloudController(this);
         sumitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 String clientID=textField1.getText();
                 int id=Integer.parseInt(clientID);
 
                 String jobDuration=textField2.getText();
                 double jobD=Double.parseDouble(jobDuration);
-                double totalCompletionTime= cc.calculateCtime(jobD);
-
+                double totalCompletionTime= cloudController.calculateCtime(jobD);
                 String jobDeadline=textField3.getText();
-                writeToText(id,jobD,jobDeadline,totalCompletionTime);
+
+                queuedJob = new Job(id, jobD, jobDeadline, totalCompletionTime); //THIS IS WHERE JOB INFO GETS SAVED FOR AUTH
+
+                //writeToText(id,jobD,jobDeadline,totalCompletionTime);
                 textField1.setText("");
                 textField2.setText("");
                 textField3.setText("");
+                cc.setVisible(true);
+
                 dispose();
             }
         });
