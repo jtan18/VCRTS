@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.sql.*;
+
 
 public class CloudController extends JFrame{
     public ArrayList<Job> jobs;
@@ -18,6 +20,11 @@ public class CloudController extends JFrame{
     public OwnerSubmit own;
     public ClientSubmit cli;
 
+    static Connection connection = null;
+    static String url = "jdbc:mysql://localhost:3306/VC3?useTimezone=true&serverTimezone=UTC";
+    static String username = "root";
+    static String password = "rootpass";
+
     public CloudController(ClientSubmit client) {
         super("VC Controller");
         this.setContentPane(this.CCPanel);
@@ -26,11 +33,12 @@ public class CloudController extends JFrame{
         jobs = new ArrayList<Job>();
         cli=client;
         Rejected reject=new Rejected();
+        Accepted accept=new Accepted();
         JButtonAccept.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 authJob(cli);
-
+                accept.setVisible(true);
                 dispose();
             }
         });
@@ -49,11 +57,13 @@ public class CloudController extends JFrame{
         this.pack();
         jobs = new ArrayList<Job>();
         own=owner;
+        Accepted accept=new Accepted();
         Rejected reject=new Rejected();
         JButtonAccept.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 authVehicle(own);
+                accept.setVisible(true);
                 dispose();
             }
         });
@@ -147,6 +157,47 @@ public class CloudController extends JFrame{
         vehicleWriteToText(own.queuedVehicle.ID, own.queuedVehicle.vehInfo, own.queuedVehicle.timeAvail);
     }
 
+
+    public void jobWriteToText(int id, double duration, String duedate, double cTime) {
+        try {
+            LocalDateTime timestamp = LocalDateTime.now();
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
+            String formattedDate = timestamp.format(dateFormatter);
+            FileWriter writer = new FileWriter("out.txt", true);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+
+            bufferedWriter.newLine();
+            bufferedWriter.write("[" + formattedDate + "]");
+            bufferedWriter.newLine();
+            bufferedWriter.write("Client ID: " + id);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Approximate Duration: " + duration + " minutes");
+            bufferedWriter.newLine();
+            bufferedWriter.write("Deadline Date: " + duedate);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Completion Time of Jobs: " + cTime);
+            bufferedWriter.newLine();
+
+            bufferedWriter.close();
+
+
+            connection = DriverManager.getConnection(url, username, password);
+
+            String sql = "INSERT INTO Jobs" + "(JobID , Duration , Deadline)" + "VALUES ("+id+", "+duration+" , '"+duedate+"')";
+
+            Statement statement = connection.createStatement();
+
+            int row = statement.executeUpdate(sql);
+
+            connection.close();
+        }
+        catch (SQLException e){
+            e.getMessage();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void vehicleWriteToText(int id, String vehicleInfo, String vehicleTime) {
         try {
             LocalDateTime timestamp = LocalDateTime.now();
@@ -163,34 +214,18 @@ public class CloudController extends JFrame{
             bufferedWriter.newLine();
             bufferedWriter.write("Available for " + vehicleTime + " hours");
             bufferedWriter.newLine();
+
             bufferedWriter.close();
+
+            connection = DriverManager.getConnection(url, username, password);
+            String sql = "INSERT INTO Vehicles" + "(VehicleID , AvailableTime , VehicleInfo)" + "VALUES ("+id+", '"+vehicleTime+"' , '"+vehicleInfo+"')";
+            Statement statement = connection.createStatement();
+            int row = statement.executeUpdate(sql);
+            connection.close();
+
+        }catch (SQLException e){
+            e.getMessage();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void jobWriteToText(int id, double duration, String duedate, double cTime) {
-        try {LocalDateTime timestamp = LocalDateTime.now();
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
-            String formattedDate = timestamp.format(dateFormatter);
-            FileWriter writer = new FileWriter("out.txt", true);
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-
-            bufferedWriter.newLine();
-
-            bufferedWriter.write("[" + formattedDate + "]");
-            bufferedWriter.newLine();
-            bufferedWriter.write("Client ID: " + id);
-            bufferedWriter.newLine();
-            bufferedWriter.write("Approximate Duration: " + duration + " minutes");
-            bufferedWriter.newLine();
-            bufferedWriter.write("Deadline Date: " + duedate);
-            bufferedWriter.newLine();
-            bufferedWriter.write("Completion Time of Jobs: " + cTime);
-
-            bufferedWriter.newLine();
-
-            bufferedWriter.close();} catch (IOException e){
             e.printStackTrace();
         }
     }

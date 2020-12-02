@@ -46,7 +46,6 @@ public class OwnerSubmit extends JFrame{
         this.setContentPane(this.ownerPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
-        JPanelConfirm.setVisible(false);
         CloudController cc=new CloudController(this);
         CloudController cloudController=new CloudController();
         submitButton.addActionListener(new ActionListener() {
